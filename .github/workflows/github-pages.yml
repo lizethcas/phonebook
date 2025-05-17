@@ -1,17 +1,15 @@
-name: Deploy to GitHub Pages
+name: GitHub Pages
 
 on:
   push:
     branches: [ master ]
   workflow_dispatch:
 
-# Configuración para permitir permisos de escritura en la implementación de GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Solo permite una implementación concurrente
 concurrency:
   group: "pages"
   cancel-in-progress: true
@@ -20,10 +18,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v3
       
-      - name: Set up Node
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
@@ -32,16 +30,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
       
-      - name: Build
+      - name: Build project
         run: npm run build
       
-      - name: Setup Pages
+      - name: Configure GitHub Pages
         uses: actions/configure-pages@v3
       
-      - name: Upload artifact
+      - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: './dist'
+          path: 'dist'
   
   deploy:
     environment:
